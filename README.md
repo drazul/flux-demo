@@ -2,6 +2,24 @@
 
 This repository contains a demo of fluxCD
 
+# Kind
+
+Kind is a very easy tool to create a testing kubernetes "cluster" in your machine.
+
+Link: https://kind.sigs.k8s.io/docs/user/quick-start/
+
+## Create test cluster
+
+```bash
+kind create cluster --name test-cluster
+```
+
+## Delete test cluster
+
+```bash
+kind delete cluster 00name test-cluster
+```
+
 # How to install flux
 
 ## Install flux operator
