@@ -17,7 +17,7 @@ kind create cluster --name test-cluster
 ## Delete test cluster
 
 ```bash
-kind delete cluster 00name test-cluster
+kind delete cluster --name test-cluster
 ```
 
 # How to install flux
