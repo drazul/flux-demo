@@ -1,0 +1,24 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: sealed-secrets-controller
+  namespace: kube-system
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: sealed-secrets-controller
+  timeout: 100
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com
+    name: sealed-secrets
+    version: 1.7.1
+  values:
+    crd:
+      create: true
+    resources:
+      limits:
+        cpu: "300m"
+        memory: "128Mi"
+      requests:
+        cpu: "150m"
+        memory: "64Mi"
