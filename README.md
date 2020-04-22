@@ -100,21 +100,44 @@ helm upgrade \
 
 # Manage Sealed Secrets
 
-The Sealed Secret operator has been installed by flux and you can find the configuration file here 
-[gitops/manifests/cluster-apps/sealed-secrets/release.yaml](gitops-manifests/cluster-apps/sealed-secrets/release.yaml)
+The Sealed Secret operator has been installed by flux. You can find the configuration file [here](gitops-manifests/cluster-apps/sealed-secrets/release.yaml).
 
 ## How to create a Sealed Secret
 
 1. Firs of all we need to install the official kubeseal binary from the official repository: https://github.com/bitnami-labs/sealed-secrets/releases
 
 2. Create a normal secret
-```
+```bash
 kubectl create secret generic my-secret --from-literal index.html=example --dry-run -o yaml > secret.yaml
 ```
 
 3. Seal the secret
-```
+```bash
 kubeseal < secret.yaml > sealed-secret.yaml
+```
+
+## Manage certificate backup
+The Sealed secret operator will rotate the encryption certificate every 30 days, and it will use the new one to seal
+all new secrets. The operator will not delete the old certificates and they will be used to restore old sealed keys.
+
+The Sealed Secret Operator will generate a new certiticate with the same name but adding a hash at the end like for example `sealed-secrets-keyff7fl`
+
+**Note**: for more details go the [official page.](https://github.com/bitnami-labs/sealed-secrets)
+
+## Backup certificate
+We should backup all secrets on kube-system namespace with following pattern: sealed-secrets-key*
+```bash
+kubectl -n kube-system get secret sealed-secrets-keyff7fl -o yaml > sealed-secret-key.yaml
+```
+
+We can restore them if we add them to the cluster again
+```bash
+kubectl apply -f sealed-secret-key.yaml
+```
+
+## Re encrypt an existing secret
+```bash
+kubeseal --re-encrypt < my-sealed-secret.yaml > my-new-sealed-secret.yaml
 ```
 
 # Forward Service Port for testing
