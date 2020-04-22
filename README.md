@@ -7,6 +7,7 @@ This repository contains a demo of fluxCD
 2. [Install Flux Operator](#install-flux-operator)
 3. [Install Helm Operator](#install-helm-operator)
 4. [Manage Sealed Secrets](#manage-sealed-secrets)
+5. [Forward Service Port for testing](#forward-service-port-for-testing)
 
 # Create test cluster with Kind
 
@@ -100,12 +101,25 @@ helm upgrade \
 # Manage Sealed Secrets
 
 The Sealed Secret operator has been installed by flux and you can find the configuration file here 
-[gitops/manifests/cluster-apps/sealed-secrets/release.yaml](gitops/manifests/cluster-apps/sealed-secrets/release.yaml)
+[gitops/manifests/cluster-apps/sealed-secrets/release.yaml](gitops-manifests/cluster-apps/sealed-secrets/release.yaml)
 
 ## How to create a Sealed Secret
 
-1. Firs of all we need to install the official kubeseal binary from the official repository:
-https://github.com/bitnami-labs/sealed-secrets/releases
-2. Create a normal secret `kubectl create secret generic my-secret --from-literal index.html=example --dry-run -o yaml > secret.yaml`
-3. Create Selaed Secret object with `kubeseal < secret.yaml > sealed-secret.yaml`
+1. Firs of all we need to install the official kubeseal binary from the official repository: https://github.com/bitnami-labs/sealed-secrets/releases
 
+2. Create a normal secret
+```
+kubectl create secret generic my-secret --from-literal index.html=example --dry-run -o yaml > secret.yaml
+```
+
+3. Seal the secret
+```
+kubeseal < secret.yaml > sealed-secret.yaml
+```
+
+# Forward Service Port for testing
+
+In order to test if our demo apps are working we need to forward the internal cluster port to our machine. 
+```
+kubectl port-forward svc/my-app 8080:80
+```
