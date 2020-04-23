@@ -1,6 +1,8 @@
 # Purpose
 
-This repository contains a demo of fluxCD
+This repository contains a demo of fluxCD.
+
+You can find the slides [here.](slides/Continuous_Delivery_on_Kubernetes_with_GitOps.pdf)
 
 # Table of Contents
 1. [Create test cluster with Kind](#create-test-cluster-with-kind)
